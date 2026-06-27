@@ -1,12 +1,10 @@
 import { getChildren } from '@/lib/queries/children'
-import { getTasks } from '@/lib/queries/tasks'
 import { getAllLogs } from '@/lib/queries/logs'
 import Card from '@/components/ui/Card'
 
 export default async function AdminDashboard() {
-  const [children, tasks, logs] = await Promise.all([
+  const [children, logs] = await Promise.all([
     getChildren(),
-    getTasks(),
     getAllLogs(10),
   ])
 
