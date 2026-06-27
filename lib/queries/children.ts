@@ -1,0 +1,60 @@
+import { getSupabaseServerClient } from '@/lib/supabase/server'
+import type { Child } from '@/lib/supabase/types'
+
+export async function getChildren(): Promise<Child[]> {
+  const supabase = getSupabaseServerClient()
+  const { data, error } = await supabase
+    .from('children')
+    .select('*')
+    .order('created_at')
+  if (error) throw error
+  return data
+}
+
+export async function getChild(id: string): Promise<Child> {
+  const supabase = getSupabaseServerClient()
+  const { data, error } = await supabase
+    .from('children')
+    .select('*')
+    .eq('id', id)
+    .single()
+  if (error) throw error
+  return data
+}
+
+export async function updateChild(id: string, updates: Partial<Pick<Child, 'name' | 'avatar' | 'color'>>): Promise<void> {
+  const supabase = getSupabaseServerClient()
+  const { error } = await supabase.from('children').update(updates).eq('id', id)
+  if (error) throw error
+}
+
+export async function addPoints(childId: string, points: number): Promise<void> {
+  const supabase = getSupabaseServerClient()
+  const { data: child, error: fetchError } = await supabase
+    .from('children')
+    .select('total_points')
+    .eq('id', childId)
+    .single()
+  if (fetchError) throw fetchError
+  const { error } = await supabase
+    .from('children')
+    .update({ total_points: child.total_points + points })
+    .eq('id', childId)
+  if (error) throw error
+}
+
+export async function deductPoints(childId: string, points: number): Promise<void> {
+  const supabase = getSupabaseServerClient()
+  const { data: child, error: fetchError } = await supabase
+    .from('children')
+    .select('total_points')
+    .eq('id', childId)
+    .single()
+  if (fetchError) throw fetchError
+  const newTotal = Math.max(0, child.total_points - points)
+  const { error } = await supabase
+    .from('children')
+    .update({ total_points: newTotal })
+    .eq('id', childId)
+  if (error) throw error
+}
