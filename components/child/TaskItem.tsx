@@ -27,25 +27,41 @@ export default function TaskItem({ task, childId, completed, onComplete }: Props
   }
 
   return (
-    <div className={`flex items-center gap-4 p-4 rounded-2xl transition ${completed ? 'bg-gray-50 opacity-60' : 'bg-white shadow-sm'}`}>
+    <div
+      className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-150 ${
+        completed ? 'opacity-45' : 'bg-surface'
+      }`}
+      style={completed ? {} : { boxShadow: '0 1px 4px rgba(44,36,56,0.06)' }}
+    >
       <button
         onClick={handleComplete}
         disabled={completed || loading}
-        className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition flex-shrink-0 ${
-          completed ? 'bg-green-400 border-green-400 text-white' : 'border-pink-mid hover:bg-pink-soft'
-        }`}
+        className="flex-shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center transition-all duration-150"
+        style={completed
+          ? { backgroundColor: '#D4748A', borderColor: '#D4748A' }
+          : { borderColor: '#F2A7B9' }
+        }
       >
-        {completed ? '✓' : loading ? '...' : ''}
+        {completed && (
+          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+        {loading && <span className="w-2 h-2 rounded-full bg-rose animate-pulse" />}
       </button>
-      <div className="flex-1">
-        <div className={`font-semibold ${completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+
+      <div className="flex-1 min-w-0">
+        <div className={`text-sm font-medium truncate ${completed ? 'line-through text-ink-muted' : 'text-ink'}`}>
           {task.title}
         </div>
         {task.description && (
-          <div className="text-sm text-gray-400">{task.description}</div>
+          <div className="text-xs text-ink-muted mt-0.5 truncate">{task.description}</div>
         )}
       </div>
-      <div className="text-sm font-bold text-pink-strong">+{task.points}分</div>
+
+      <div className="text-xs font-semibold flex-shrink-0" style={{ color: '#D4748A' }}>
+        +{task.points}
+      </div>
     </div>
   )
 }

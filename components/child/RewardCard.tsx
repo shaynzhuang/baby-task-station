@@ -31,19 +31,38 @@ export default function RewardCard({ reward, childId, currentPoints, onRedeem }:
     }
   }
 
+  const isDisabled = !canAfford || outOfStock || loading || redeemed
+
   return (
-    <div className={`bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4 ${!canAfford ? 'opacity-50' : ''}`}>
-      <div className="flex-1">
-        <div className="font-semibold text-gray-800">{reward.title}</div>
-        {reward.description && <div className="text-sm text-gray-400">{reward.description}</div>}
-        <div className="text-pink-strong font-bold mt-1">{reward.points_required} 分</div>
+    <div
+      className={`bg-surface rounded-xl px-4 py-4 flex items-center gap-4 transition-all ${!canAfford && !redeemed ? 'opacity-40' : ''}`}
+      style={{ boxShadow: '0 1px 4px rgba(44,36,56,0.06)' }}
+    >
+      <div className="flex-1 min-w-0">
+        <div className="text-sm font-medium text-ink truncate">{reward.title}</div>
+        {reward.description && (
+          <div className="text-xs text-ink-muted mt-0.5 truncate">{reward.description}</div>
+        )}
+        <div className="text-xs font-semibold mt-1.5" style={{ color: '#D4748A' }}>
+          {reward.points_required} 积分
+        </div>
       </div>
+
       <button
         onClick={handleRedeem}
-        disabled={!canAfford || outOfStock || loading || redeemed}
-        className="bg-pink-mid text-white rounded-xl px-4 py-2 text-sm font-semibold hover:bg-pink-strong transition disabled:opacity-40"
+        disabled={isDisabled}
+        className="flex-shrink-0 text-xs font-semibold px-4 py-2 rounded-lg transition-all"
+        style={
+          redeemed
+            ? { backgroundColor: '#F2A7B9', color: '#fff' }
+            : outOfStock
+            ? { backgroundColor: '#E2DCE8', color: '#9B8FA4' }
+            : canAfford
+            ? { backgroundColor: '#2C2438', color: '#FFF8F6' }
+            : { backgroundColor: '#E2DCE8', color: '#9B8FA4' }
+        }
       >
-        {redeemed ? '已兑换 ✓' : outOfStock ? '已售罄' : loading ? '...' : '兑换'}
+        {redeemed ? '已兑换' : outOfStock ? '售罄' : loading ? '…' : '兑换'}
       </button>
     </div>
   )

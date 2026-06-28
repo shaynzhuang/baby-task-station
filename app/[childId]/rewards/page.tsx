@@ -32,20 +32,39 @@ export default function RewardsPage() {
     setPoints(prev => Math.max(0, prev - pointsSpent))
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-400">加载中...</div>
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-ink-muted text-sm">加载中</div>
   if (!child) return null
 
   return (
-    <main className="min-h-screen px-4 py-8 max-w-md mx-auto">
-      <button onClick={() => router.back()} className="text-gray-400 text-sm mb-6">← 返回</button>
-      <div className="flex items-center gap-3 mb-2">
-        <span className="text-3xl">{child.avatar}</span>
-        <h1 className="text-2xl font-bold text-gray-800">兑换礼物</h1>
-      </div>
-      <div className="text-sm text-gray-500 mb-6">当前积分：<span className="font-bold text-pink-strong text-lg">{points}</span> 分</div>
+    <main className="min-h-screen px-5 py-10 max-w-sm mx-auto">
+      <button onClick={() => router.back()} className="flex items-center gap-1 text-ink-muted text-sm mb-10 hover:text-ink transition">
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+        返回
+      </button>
 
-      <div className="space-y-3">
-        {rewards.length === 0 && <p className="text-center text-gray-400 py-8">还没有礼物 🎁</p>}
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <p className="text-xs tracking-widest text-ink-muted uppercase mb-1">礼物商店</p>
+          <h1 className="text-2xl font-bold text-ink">{child.avatar} {child.name}</h1>
+        </div>
+        <div
+          className="flex flex-col items-center px-4 py-2 rounded-2xl"
+          style={{
+            background: 'linear-gradient(135deg, #FAE8EE 0%, #F2C8D4 100%)',
+            boxShadow: '0 0 0 3px rgba(242,167,185,0.25)',
+          }}
+        >
+          <span className="text-xl font-bold" style={{ color: '#D4748A' }}>{points}</span>
+          <span className="text-xs text-ink-muted">积分</span>
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        {rewards.length === 0 && (
+          <p className="text-center text-ink-muted text-sm py-12">还没有礼物</p>
+        )}
         {rewards.map(reward => (
           <RewardCard
             key={reward.id}
