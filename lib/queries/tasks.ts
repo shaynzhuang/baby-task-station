@@ -2,7 +2,7 @@ import { getSupabaseServerClient } from '@/lib/supabase/server'
 import type { Task, TaskInsert } from '@/lib/supabase/types'
 
 export async function getTasks(): Promise<Task[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('tasks')
     .select('*')
@@ -12,7 +12,7 @@ export async function getTasks(): Promise<Task[]> {
 }
 
 export async function getTasksForChild(childId: string): Promise<Task[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('tasks')
     .select('*')
@@ -24,19 +24,19 @@ export async function getTasksForChild(childId: string): Promise<Task[]> {
 }
 
 export async function createTask(data: TaskInsert): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('tasks').insert(data)
   if (error) throw error
 }
 
 export async function updateTask(id: string, updates: Partial<Task>): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('tasks').update(updates).eq('id', id)
   if (error) throw error
 }
 
 export async function deleteTask(id: string): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('tasks').delete().eq('id', id)
   if (error) throw error
 }

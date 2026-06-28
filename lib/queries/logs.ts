@@ -7,7 +7,7 @@ export async function logTaskCompletion(
   taskId: string,
   points: number
 ): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('task_logs').insert({
     child_id: childId,
     task_id: taskId,
@@ -17,7 +17,7 @@ export async function logTaskCompletion(
 }
 
 export async function getTodayLogs(childId: string): Promise<TaskLog[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('task_logs')
     .select('*')
@@ -28,7 +28,7 @@ export async function getTodayLogs(childId: string): Promise<TaskLog[]> {
 }
 
 export async function getAllLogsForTask(childId: string, taskId: string): Promise<TaskLog[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('task_logs')
     .select('*')
@@ -39,7 +39,7 @@ export async function getAllLogsForTask(childId: string, taskId: string): Promis
 }
 
 export async function getAllLogs(limit = 100): Promise<(TaskLog & { children: { name: string }, tasks: { title: string } })[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('task_logs')
     .select('*, children(name), tasks(title)')

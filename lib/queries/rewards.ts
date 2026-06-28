@@ -3,7 +3,7 @@ import type { Reward, RewardInsert } from '@/lib/supabase/types'
 import { deductPoints } from '@/lib/queries/children'
 
 export async function getRewards(): Promise<Reward[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('rewards')
     .select('*')
@@ -14,7 +14,7 @@ export async function getRewards(): Promise<Reward[]> {
 }
 
 export async function getAllRewards(): Promise<Reward[]> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data, error } = await supabase
     .from('rewards')
     .select('*')
@@ -24,19 +24,19 @@ export async function getAllRewards(): Promise<Reward[]> {
 }
 
 export async function createReward(data: RewardInsert): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('rewards').insert(data)
   if (error) throw error
 }
 
 export async function updateReward(id: string, updates: Partial<Reward>): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { error } = await supabase.from('rewards').update(updates).eq('id', id)
   if (error) throw error
 }
 
 export async function redeemReward(childId: string, rewardId: string): Promise<void> {
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   const { data: reward, error: fetchError } = await supabase
     .from('rewards')
     .select('points_required, stock')

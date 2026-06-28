@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ re
 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ rewardId: string }> }) {
   const { rewardId } = await params
-  const supabase = getSupabaseServerClient()
+  const supabase = await getSupabaseServerClient()
   await supabase.from('rewards').delete().eq('id', rewardId)
   return NextResponse.json({ ok: true })
 }
