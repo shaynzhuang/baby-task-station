@@ -27,6 +27,17 @@ export async function getTodayLogs(childId: string): Promise<TaskLog[]> {
   return data
 }
 
+export async function getAllLogsForTask(childId: string, taskId: string): Promise<TaskLog[]> {
+  const supabase = getSupabaseServerClient()
+  const { data, error } = await supabase
+    .from('task_logs')
+    .select('*')
+    .eq('child_id', childId)
+    .eq('task_id', taskId)
+  if (error) throw error
+  return data
+}
+
 export async function getAllLogs(limit = 100): Promise<(TaskLog & { children: { name: string }, tasks: { title: string } })[]> {
   const supabase = getSupabaseServerClient()
   const { data, error } = await supabase

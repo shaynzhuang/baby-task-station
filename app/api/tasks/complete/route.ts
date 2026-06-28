@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getChild } from '@/lib/queries/children'
-import { logTaskCompletion } from '@/lib/queries/logs'
+import { logTaskCompletion, getTodayLogs, getAllLogsForTask } from '@/lib/queries/logs'
 import { addPoints } from '@/lib/queries/children'
-import { getTodayLogs } from '@/lib/queries/logs'
 import { getTasksForChild } from '@/lib/queries/tasks'
 
 export async function POST(req: NextRequest) {
@@ -11,15 +9,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'missing fields' }, { status: 400 })
   }
 
-  // Verify task belongs to this child and is enabled
   const tasks = await getTasksForChild(childId)
   const task = tasks.find(t => t.id === taskId)
   if (!task) return NextResponse.json({ error: 'task not found' }, { status: 404 })
 
-  // Check not already completed today
-  const todayLogs = await getTodayLogs(childId)
-  const alreadyDone = todayLogs.some(l => l.task_id === taskId)
-  if (alreadyDone) return NextResponse.json({ error: 'already completed' }, { status: 409 })
+  // once tasks: check all logs ever; daily tasks: check today only
+  if (task.type === 'once') {
+    const allLogs = await getAllLogsForTask(childId, taskId)
+    if (allLogs.length > 0) return NextResponse.json({ error: 'already completed' }, { status: 409 })
+  } else {
+    const todayLogs = await getTodayLogs(childId)
+    const alreadyDone = todayLogs.some(l => l.task_id === taskId)
+    if (alreadyDone) return NextResponse.json({ error: 'already completed' }, { status: 409 })
+  }
 
   await logTaskCompletion(childId, taskId, task.points)
   await addPoints(childId, task.points)

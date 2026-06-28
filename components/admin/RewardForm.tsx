@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Reward } from '@/lib/supabase/types'
 import Button from '@/components/ui/Button'
 
-export type RewardRewardFormData = Pick<Reward, 'title' | 'description' | 'points_required' | 'stock' | 'enabled'>
+export type RewardFormData = Pick<Reward, 'title' | 'description' | 'points_required' | 'stock' | 'enabled'>
 
 type Props = {
   initial?: Partial<RewardFormData>

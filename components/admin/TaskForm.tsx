@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Child } from '@/lib/supabase/types'
 import Button from '@/components/ui/Button'
 
-export type TaskTaskFormData = {
+export type TaskFormData = {
   title: string
   description: string
   points: number

@@ -30,31 +30,12 @@ export async function updateChild(id: string, updates: Partial<Pick<Child, 'name
 
 export async function addPoints(childId: string, points: number): Promise<void> {
   const supabase = getSupabaseServerClient()
-  const { data: child, error: fetchError } = await supabase
-    .from('children')
-    .select('total_points')
-    .eq('id', childId)
-    .single()
-  if (fetchError) throw fetchError
-  const { error } = await supabase
-    .from('children')
-    .update({ total_points: child.total_points + points })
-    .eq('id', childId)
+  const { error } = await supabase.rpc('add_points', { child_id: childId, delta: points })
   if (error) throw error
 }
 
 export async function deductPoints(childId: string, points: number): Promise<void> {
   const supabase = getSupabaseServerClient()
-  const { data: child, error: fetchError } = await supabase
-    .from('children')
-    .select('total_points')
-    .eq('id', childId)
-    .single()
-  if (fetchError) throw fetchError
-  const newTotal = Math.max(0, child.total_points - points)
-  const { error } = await supabase
-    .from('children')
-    .update({ total_points: newTotal })
-    .eq('id', childId)
+  const { error } = await supabase.rpc('deduct_points', { child_id: childId, delta: points })
   if (error) throw error
 }
