@@ -2,7 +2,7 @@ import { useState } from 'react'
 import type { Child } from '@/lib/supabase/types'
 import Button from '@/components/ui/Button'
 
-type FormData = {
+export type TaskTaskFormData = {
   title: string
   description: string
   points: number
@@ -13,14 +13,14 @@ type FormData = {
 }
 
 type Props = {
-  initial?: Partial<FormData>
+  initial?: Partial<TaskFormData>
   children: Child[]
-  onSubmit: (data: FormData) => void
+  onSubmit: (data: TaskFormData) => void
   onCancel: () => void
 }
 
 export default function TaskForm({ initial, children, onSubmit, onCancel }: Props) {
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<TaskFormData>({
     title: initial?.title ?? '',
     description: initial?.description ?? '',
     points: initial?.points ?? 1,

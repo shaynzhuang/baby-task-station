@@ -4,7 +4,7 @@ import type { Reward } from '@/lib/supabase/types'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
-import RewardForm from '@/components/admin/RewardForm'
+import RewardForm, { type RewardFormData } from '@/components/admin/RewardForm'
 
 export default function AdminRewardsPage() {
   const [rewards, setRewards] = useState<Reward[]>([])
@@ -15,7 +15,7 @@ export default function AdminRewardsPage() {
     fetch('/api/admin/rewards').then(r => r.json()).then(setRewards)
   }, [])
 
-  async function handleAdd(data: any) {
+  async function handleAdd(data: RewardFormData) {
     await fetch('/api/admin/rewards', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -26,7 +26,7 @@ export default function AdminRewardsPage() {
     setShowAdd(false)
   }
 
-  async function handleEdit(data: any) {
+  async function handleEdit(data: RewardFormData) {
     if (!editing) return
     await fetch(`/api/admin/rewards/${editing.id}`, {
       method: 'PATCH',

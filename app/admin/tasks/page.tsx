@@ -4,7 +4,7 @@ import type { Task, Child } from '@/lib/supabase/types'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import Modal from '@/components/ui/Modal'
-import TaskForm from '@/components/admin/TaskForm'
+import TaskForm, { type TaskFormData } from '@/components/admin/TaskForm'
 
 export default function AdminTasksPage() {
   const [tasks, setTasks] = useState<Task[]>([])
@@ -19,7 +19,7 @@ export default function AdminTasksPage() {
     ]).then(([t, c]) => { setTasks(t); setChildren(c) })
   }, [])
 
-  async function handleAdd(data: any) {
+  async function handleAdd(data: TaskFormData) {
     await fetch('/api/admin/tasks', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -30,7 +30,7 @@ export default function AdminTasksPage() {
     setShowAdd(false)
   }
 
-  async function handleEdit(data: any) {
+  async function handleEdit(data: TaskFormData) {
     if (!editing) return
     await fetch(`/api/admin/tasks/${editing.id}`, {
       method: 'PATCH',

@@ -2,16 +2,16 @@ import { useState } from 'react'
 import type { Reward } from '@/lib/supabase/types'
 import Button from '@/components/ui/Button'
 
-type FormData = Pick<Reward, 'title' | 'description' | 'points_required' | 'stock' | 'enabled'>
+export type RewardRewardFormData = Pick<Reward, 'title' | 'description' | 'points_required' | 'stock' | 'enabled'>
 
 type Props = {
-  initial?: Partial<FormData>
-  onSubmit: (data: FormData) => void
+  initial?: Partial<RewardFormData>
+  onSubmit: (data: RewardFormData) => void
   onCancel: () => void
 }
 
 export default function RewardForm({ initial, onSubmit, onCancel }: Props) {
-  const [form, setForm] = useState<FormData>({
+  const [form, setForm] = useState<RewardFormData>({
     title: initial?.title ?? '',
     description: initial?.description ?? '',
     points_required: initial?.points_required ?? 10,
